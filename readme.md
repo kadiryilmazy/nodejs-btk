@@ -1,11 +1,6 @@
--CUSTOM MODULE
-Bizim oluşturduğumuz module.export işlemleri bu alanı kapsar.
---NODE MODULE
-Node kurulumu ile gelen node yapısı içerisinde hazır olarak dahil edilmiş moduller.
--File system module
--Path module
--Events module
--Os module
--Http module
----3RD PARTY MODULE
-Npm paket yükleyicileri ile dahil edilen modüller.
+path.parse() fonksiyonunun döndürdüğü nesnedeki özellikler:
+root: Dosya yolundaki kök dizin (örneğin C:\ veya / gibi)
+dir: Dosyanın bulunduğu klasörün tam yolu (directory)
+base: Dosyanın adı ve uzantısı birlikte (örneğin app.js)
+name: Dosya adı, uzantı olmadan (örneğin app)
+ext: Dosya uzantısı (örneğin .js)
