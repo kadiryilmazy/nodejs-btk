@@ -6,8 +6,38 @@
             name="viewport"
             content="width=device-width, initial-scale=1.0"
         />
-        <script src="scriptA.js"></script>
+        <script
+            src="scriptA.js"
+            type="module"
+        ></script>
         <script src="scriptB.js"></script>
     </head>
-    <body></body>
+    <body>
+        <div>
+            <pre>
+,F
+                PS C:\Users\Admin\Desktop\nodejs-btk> node scriptA
+{
+  id: '.',
+  path: 'C:\\Users\\Admin\\Desktop\\nodejs-btk',
+  exports: {},
+  filename: 'C:\\Users\\Admin\\Desktop\\nodejs-btk\\scriptA.js',
+  loaded: false,
+  children: [],
+  paths: [
+    'C:\\Users\\Admin\\Desktop\\nodejs-btk\\node_modules',
+    'C:\\Users\\Admin\\Desktop\\node_modules',
+    'C:\\Users\\Admin\\node_modules',
+    'C:\\Users\\node_modules',
+    'C:\\node_modules'
+  ],
+  [Symbol(kIsMainSymbol)]: true,
+  [Symbol(kIsCachedByESMLoader)]: false,
+  [Symbol(kURL)]: undefined,
+  [Symbol(kFormat)]: undefined,
+  [Symbol(kIsExecuting)]: true
+}
+            </pre>
+        </div>
+    </body>
 </html>
