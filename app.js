@@ -1,18 +1,7 @@
-const path = require("path");
+const url = require("url");
 
-let result = path.resolve("app.js"); //tam yolu alır
-console.log("resolve result-> " + result);
+const address = "http://localhost:8080/default?year=2023&month=10";
 
-result = path.extname("app.js", "index.js"); // uzantıyı alır.Extension Name
-console.log("Extension name result-> " + result);
+const parsedUrl = url.parse(address, true);
 
-result = path.parse(__filename); // dosya adını alır
-console.log("Parse result-> " + result);
-
-console.log("result root-> " + result.root);
-console.log("result dir-> " + result.dir);
-console.log("result base-> " + result.base);
-console.log("result name-> " + result.name);
-console.log("result ext-> " + result.ext);
-
-console.log(result);
+console.log(parsedUrl);

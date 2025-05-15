@@ -1,6 +1,4 @@
-path.parse() fonksiyonunun döndürdüğü nesnedeki özellikler:
-root: Dosya yolundaki kök dizin (örneğin C:\ veya / gibi)
-dir: Dosyanın bulunduğu klasörün tam yolu (directory)
-base: Dosyanın adı ve uzantısı birlikte (örneğin app.js)
-name: Dosya adı, uzantı olmadan (örneğin app)
-ext: Dosya uzantısı (örneğin .js)
+const url = require("url");
+const address = "http://localhost:8080/default?year=2023&month=10";
+const parsedUrl = url.parse(address, true);
+console.log(parsedUrl);
