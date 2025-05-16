@@ -2,41 +2,28 @@ const http = require("http");
 const fs = require("fs");
 
 const server = http.createServer((req, res) => {
-    // res.setHeader("Content-Type", "text/plain");
-    // res.setHeader("Content-Type", "application/json");
-    res.setHeader("Content-Type", "text/html");
-    res.statusCode = 200;
-    res.statusMessage = "Ok";
-
-    // res.write("Hello World");
-
-    // res.write(
-    //     JSON.stringify({
-    //         message: "Hello World",
-    //         status: "success",
-    //         data: {
-    //             name: "John Doe",
-    //             age: 30,
-    //             city: "New York",
-    //         },
-    //     })
-    // );
-
-    // res.write("<html><head><title>My First Server</title></head><body><h1>Hello World</h1></body></html>");
-
-    fs.readFile("./index.html", (err, data) => {
-        if (err) {
-            res.statusCode = 500;
-            res.statusMessage = "Internal Server Error";
-            res.write("Error reading file");
-            return res.end();
-        } else {
-            res.setHeader("Content-Type", "text/html");
-            res.statusCode = 200;
-            res.statusMessage = "Ok";
-            res.end(data);
-        }
-    });
+    const url = req.url;
+    const method = req.method;
+    if (url === "/") {
+        res.write(`<html>
+            <head>
+            <title>Enter Message</title>
+            </head>
+            <body>
+            <form method="POST" action="/log">
+                <input type="text" name="message" />
+                <button type="submit">Save</button>
+            </form>
+            </body>
+            </html>`);
+        return res.end();
+    }
+    if (url === "/log" && method === "POST") {
+        fs.appendFileSync("message.txt", "\nDummy");
+        res.statusCode = 302;
+        res.setHeader("Location", "/");
+        return res.end();
+    }
 });
 
 server.listen(3000);
