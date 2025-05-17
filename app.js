@@ -1,19 +1,21 @@
 const express = require("express");
 const app = express();
 
-app.use((req, res, next) => {
-    console.log("middleware 1 worked");
+app.use("/", (req, res, next) => {
+    console.log("Loglama yapıldı..");
     next();
 });
 
-app.use((req, res, next) => {
-    console.log("middleware 2 worked");
-    res.send("<h1>Hello from express</h1>");
-    next();
+app.use("/add-product", (req, res, next) => {
+    res.send("<h1>Add product page</h1>");
 });
 
-app.use((req, res, next) => {
-    console.log("middleware 3 worked");
+app.use("/product-list", (req, res, next) => {
+    res.send("<h1>Product list page</h1>");
+});
+
+app.use("/", (req, res, next) => {
+    res.send("<h1>home page</h1>");
 });
 
 app.listen(3000, () => {
