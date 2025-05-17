@@ -1,7 +1,14 @@
-const http = require("http");
-const routes = require("./routes");
+const express = require("express");
+const app = express();
 
-const server = http.createServer(routes);
+app.get("/", (req, res) => {
+    res.send("Hello World!");
+});
 
-server.listen(3000);
-console.log("Server is running on port 3000");
+app.get("/api/products", (req, res) => {
+    res.json({ message: "Hello from the API!" });
+});
+
+app.listen(3000, () => {
+    console.log("Server is running on port 3000");
+});

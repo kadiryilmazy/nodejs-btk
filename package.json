@@ -1,0 +1,26 @@
+{
+    "dependencies": {
+        "express": "^5.1.0",
+        "nodemon": "^3.1.10"
+    },
+    "name": "nodejs-btk",
+    "version": "1.0.0",
+    "main": "app.js",
+    "devDependencies": {},
+    "scripts": {
+        "start": " nodemon app.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/kadiryilmazy/nodejs-btk.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/kadiryilmazy/nodejs-btk/issues"
+    },
+    "homepage": "https://github.com/kadiryilmazy/nodejs-btk#readme",
+    "description": ""
+}
