@@ -1,31 +1,8 @@
-const products = [
-    {
-        name: "Samsung S8",
-        price: 500,
-        image: "1.jpg",
-        description: "Released in 2017 with a 5.8-inch display.",
-    },
-    {
-        name: "Samsung S9",
-        price: 600,
-        image: "2.jpg",
-        description: "Released in 2018 with a 5.8-inch display.",
-    },
-    {
-        name: "Samsung S10",
-        price: 700,
-        image: "3.jpg",
-        description: "Released in 2019 with a 6.1-inch display.",
-    },
-    {
-        name: "Samsung S20",
-        price: 800,
-        image: "4.jpg",
-        description: "Released in 2020 with a 6.2-inch display.",
-    },
-];
+const Product = require("../models/product");
 
 exports.getProduct = (req, res, next) => {
+    const products = Product.getAll();
+
     res.render("index", { title: "Homepage", products: products, path: "/" });
 };
 
@@ -37,11 +14,9 @@ exports.getAddProduct = (req, res, next) => {
 };
 
 exports.postAddProduct = (req, res, next) => {
-    products.push({
-        name: req.body.name,
-        price: req.body.price,
-        image: req.body.image,
-        description: req.body.description,
-    });
+    console.log("Gelen veri:", req.body);
+    const product = new Product(req.body.name, req.body.price, req.body.imageUrl, req.body.description);
+
+    product.saveProduct();
     res.redirect("/");
 };
