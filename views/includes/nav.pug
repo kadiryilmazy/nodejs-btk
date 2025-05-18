@@ -1,19 +1,14 @@
 nav.navbar.navbar-expand-lg.navbar-dark.bg-primary.fixed-top
   .container
     a.navbar-brand(href="/") Shopping
+    ul.navbar-nav.mr-auto
+      li.nav-item
+        a.nav-link(class=(path == '/' ? 'active' : ''), href="/") Products
+      li.nav-item
+        a.nav-link(class=(path == '/admin/add-product' ? 'active' : ''), href="/admin/add-product") Add Product
 
-    //- Menü toggle butonu (responsive)
-    button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbarContent", aria-controls="navbarContent", aria-expanded="false", aria-label="Toggle navigation")
-      span.navbar-toggler-icon
-
-    //- Menü içerikleri
-    #navbarContent.collapse.navbar-collapse
-      ul.navbar-nav.mr-auto
-        li.nav-item
-          a.nav-link(href="/admin/add-product") Add Product
-
-      ul.navbar-nav.ml-auto
-        li.nav-item
-          a.nav-link(href="/login") Login
-        li.nav-item
-          a.nav-link(href="/register") Register
+    ul.navbar-nav.ml-auto
+      li.nav-item
+        a.nav-link(href="/login") Login
+      li.nav-item
+        a.nav-link(href="/register") Register
