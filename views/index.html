@@ -8,14 +8,12 @@
             content="width=device-width, initial-scale=1, shrink-to-fit=no"
         />
 
-        <!-- FontAwesome CSS -->
         <link
             rel="stylesheet"
             href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
             integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
             crossorigin="anonymous"
         />
-
         <!-- Bootstrap CSS -->
         <link
             rel="stylesheet"
@@ -23,24 +21,14 @@
             integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
             crossorigin="anonymous"
         />
-
-        <!-- Custom CSS -->
         <link
             rel="stylesheet"
             href="/css/style.css"
         />
-
-        <style>
-            /* 🧱 Navbar yüksekliği kadar boşluk bırak */
-            .content-wrapper {
-                padding-top: 70px; /* Navbar yüksekliği ile orantılı ayar */
-            }
-        </style>
-
         <title>Hello, world!</title>
     </head>
+
     <body>
-        <!-- 🧭 Sabit Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
             <div class="container">
                 <a
@@ -67,10 +55,11 @@
             </div>
         </nav>
 
-        <!-- 📦 İçerik Alanı -->
-        <div class="container content-wrapper">
+        <div
+            class="container pt-100"
+            id="pt-100"
+        >
             <div class="row">
-                <!-- Sol Kategori Menüsü -->
                 <div class="col-lg-3">
                     <div class="list-group">
                         <a
@@ -90,10 +79,7 @@
                         >
                     </div>
                 </div>
-
-                <!-- Sağ Ana İçerik -->
                 <div class="col-lg-9">
-                    <!-- 🎞️ Slider -->
                     <div
                         id="mySlider"
                         class="carousel slide"
@@ -101,16 +87,16 @@
                     >
                         <ol class="carousel-indicators">
                             <li
-                                data-target="#mySlider"
+                                data-target="mySlide"
                                 data-slide-to="0"
                                 class="active"
                             ></li>
                             <li
-                                data-target="#mySlider"
+                                data-target="mySlide"
                                 data-slide-to="1"
                             ></li>
                             <li
-                                data-target="#mySlider"
+                                data-target="mySlide"
                                 data-slide-to="2"
                             ></li>
                         </ol>
@@ -153,10 +139,7 @@
                         </a>
                     </div>
 
-                    <!-- 🛍️ Ürün Kartları -->
                     <div class="row">
-                        <!-- 4 ürün örnek -->
-                        <!-- Kart 1 -->
                         <div class="col-md-4">
                             <div class="card my-3">
                                 <img
@@ -165,21 +148,26 @@
                                     class="card-img-top"
                                 />
                                 <div class="card-body">
-                                    <h4 class="card-title"><a href="#">Product Name</a></h4>
+                                    <h4 class="card-title">
+                                        <a href="#">Product Name</a>
+                                    </h4>
                                     <p class="card-text pt-2">Lorem ipsum dolor sit.</p>
                                 </div>
                                 <div class="card-footer">
-                                    <small class="text-muted"> <i class="fas fa-lira-sign"></i> 100 </small>
+                                    <small class="text-muted">
+                                        <i class="fas fa-lira-sign"></i>
+                                        100
+                                    </small>
                                     <a
                                         href="#"
                                         class="btn btn-secondary btn-sm float-right"
                                     >
-                                        <i class="fa fa-angle-double-right"></i> Details
+                                        <i class="fa fa-angle-double-right"></i>
+                                        Details
                                     </a>
                                 </div>
                             </div>
                         </div>
-                        <!-- Kart 2 -->
                         <div class="col-md-4">
                             <div class="card my-3">
                                 <img
@@ -188,21 +176,26 @@
                                     class="card-img-top"
                                 />
                                 <div class="card-body">
-                                    <h4 class="card-title"><a href="#">Product Name</a></h4>
+                                    <h4 class="card-title">
+                                        <a href="#">Product Name</a>
+                                    </h4>
                                     <p class="card-text pt-2">Lorem ipsum dolor sit.</p>
                                 </div>
                                 <div class="card-footer">
-                                    <small class="text-muted"> <i class="fas fa-lira-sign"></i> 100 </small>
+                                    <small class="text-muted">
+                                        <i class="fas fa-lira-sign"></i>
+                                        100
+                                    </small>
                                     <a
                                         href="#"
                                         class="btn btn-secondary btn-sm float-right"
                                     >
-                                        <i class="fa fa-angle-double-right"></i> Details
+                                        <i class="fa fa-angle-double-right"></i>
+                                        Details
                                     </a>
                                 </div>
                             </div>
                         </div>
-                        <!-- Kart 3 -->
                         <div class="col-md-4">
                             <div class="card my-3">
                                 <img
@@ -211,21 +204,26 @@
                                     class="card-img-top"
                                 />
                                 <div class="card-body">
-                                    <h4 class="card-title"><a href="#">Product Name</a></h4>
+                                    <h4 class="card-title">
+                                        <a href="#">Product Name</a>
+                                    </h4>
                                     <p class="card-text pt-2">Lorem ipsum dolor sit.</p>
                                 </div>
                                 <div class="card-footer">
-                                    <small class="text-muted"> <i class="fas fa-lira-sign"></i> 100 </small>
+                                    <small class="text-muted">
+                                        <i class="fas fa-lira-sign"></i>
+                                        100
+                                    </small>
                                     <a
                                         href="#"
                                         class="btn btn-secondary btn-sm float-right"
                                     >
-                                        <i class="fa fa-angle-double-right"></i> Details
+                                        <i class="fa fa-angle-double-right"></i>
+                                        Details
                                     </a>
                                 </div>
                             </div>
                         </div>
-                        <!-- Kart 4 -->
                         <div class="col-md-4">
                             <div class="card my-3">
                                 <img
@@ -234,27 +232,31 @@
                                     class="card-img-top"
                                 />
                                 <div class="card-body">
-                                    <h4 class="card-title"><a href="#">Product Name</a></h4>
+                                    <h4 class="card-title">
+                                        <a href="#">Product Name</a>
+                                    </h4>
                                     <p class="card-text pt-2">Lorem ipsum dolor sit.</p>
                                 </div>
                                 <div class="card-footer">
-                                    <small class="text-muted"> <i class="fa fa-try"></i> 100 </small>
+                                    <small class="text-muted">
+                                        <i class="fa fa-try"></i>
+                                        100
+                                    </small>
                                     <a
                                         href="#"
                                         class="btn btn-secondary btn-sm float-right"
                                     >
-                                        <i class="fa fa-angle-double-right"></i> Details
+                                        <i class="fa fa-angle-double-right"></i>
+                                        Details
                                     </a>
                                 </div>
                             </div>
                         </div>
-                        <!-- Diğer ürünler aynı yapıyla çoğaltılabilir -->
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- JS Script'ler -->
         <script
             src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

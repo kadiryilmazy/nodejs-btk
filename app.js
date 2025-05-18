@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const path = require("path");
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "public")));
 
 const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/user");
