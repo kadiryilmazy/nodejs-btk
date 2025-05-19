@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //ROUTES
 const adminRoutes = require("./routes/admin");
-const userRoutes = require("./routes/user");
+const userRoutes = require("./routes/shop");
 app.use("/admin", adminRoutes);
 app.use(userRoutes);
 
