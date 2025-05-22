@@ -4,7 +4,7 @@ mixin createProduct(product)
             img(src=`/img/${product.imageUrl}` alt=`${product.description}`).card-img-top
             .card-body
                 h4.card-title
-                a(href="#") #{product.name}
+                    a(href="#") #{product.name}
                                 
                 p.card-text.pt-2 #{product.description}  
                             
@@ -12,5 +12,5 @@ mixin createProduct(product)
                 small.text-muted
                     i.fas.fa-lira-sign #{product.price}
 
-                a(href="#").btn.btn-secondary.btn-sm.float-right
-                    i.fa.fa-angle-double-right Details 
+                a(href="#").btn.btn-outline.btn-sm.float-right
+                    i.fa.fa-angle-double-right Add To Cart 
