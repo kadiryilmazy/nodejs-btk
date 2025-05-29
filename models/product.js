@@ -37,4 +37,13 @@ module.exports = class Product {
     static getAll() {
         return products;
     }
+
+    static getById(id) {
+        const product = products.find((i) => i.id === id);
+        if (!product) {
+            return null;
+        } else {
+            return product;
+        }
+    }
 };

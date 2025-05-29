@@ -10,11 +10,20 @@ exports.getProducts = (req, res, next) => {
     res.render("shop/products", { title: "Products", products: products, path: "/products" });
 };
 
+exports.getProduct = (req, res, next) => {
+    const productId = req.params.productid;
+    const product = Product.getById(productId);
+    res.render("shop/product-detail", {
+        title: product.name,
+        product: product,
+        path: "/products",
+    });
+};
+
 exports.getProductsDetails = (req, res, next) => {
     res.render("shop/details", { title: "Details", path: "/details" });
 };
 
-// ✅ Fonksiyon adı düzeltildi
 exports.getCart = (req, res, next) => {
     res.render("shop/cart", { title: "Cart", path: "/cart" });
 };
