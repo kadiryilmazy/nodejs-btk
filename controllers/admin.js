@@ -2,7 +2,12 @@ const Product = require("../models/product");
 
 exports.getProducts = (req, res, next) => {
     const products = Product.getAll();
-    res.render("admin/products", { title: "Admin Products", products: products, path: "/admin/products" });
+    res.render("admin/products", {
+        title: "Admin Products",
+        products: products,
+        path: "/admin/products",
+        action: req.query.action || "",
+    });
 };
 
 exports.getAddProduct = (req, res, next) => {
@@ -35,5 +40,11 @@ exports.postEditProduct = (req, res, next) => {
     product.imageUrl = req.body.imageUrl;
     product.description = req.body.description;
 
-    res.redirect("/admin/products");
+    res.redirect("/admin/products?action=edit");
+};
+
+exports.postDeleteProduct = (req, res, next) => {
+    const productId = req.body.id;
+    Product.deleteById(productId);
+    res.redirect("/admin/products?action=delete");
 };

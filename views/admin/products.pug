@@ -1,6 +1,12 @@
 extends ../layouts/main-layout.pug
 
 block content
+    if(action !=="undefined" && action ==="edit")
+        div.alert.alert-success
+            div Products updated successfully.
+    if(action !=="undefined" && action ==="delete")
+        div.alert.alert-danger
+            div Products updated successfully.
     .row   
         if products.length > 0
             table.table.table-bordered 
@@ -19,6 +25,9 @@ block content
                             td #{product.price} TL 
                             td
                                 a.btn.btn-primary.btn-sm(href=`/admin/products/${product.id}`) Edit 
+                                form(action='/admin/delete-product' method='POST')
+                                    input(type='hidden' name='productId' value=`${product.id}`)
+                                    button.btn.btn-danger.btn-sm.ml-2(type='submit') Delete
                                
         else 
             h1 No Products
