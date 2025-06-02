@@ -1,17 +1,17 @@
 const categories = [
     {
         id: "1",
-        name: "telefon",
+        name: "Telefon",
         description: "Telefon kategorisi, telefon ve iletişim cihazlarını içerir.",
     },
     {
         id: "2",
-        name: "bilgisayar",
+        name: "Bilgisayar",
         description: "Bilgisayar kategorisi, masaüstü ve dizüstü bilgisayarları içerir.",
     },
     {
         id: "3",
-        name: "beyaz eşya",
+        name: "Beyaz Eşya",
         description: "Beyaz eşya kategorisi, buzdolabı, çamaşır makinesi gibi ev aletlerini içerir.",
     },
 ];
