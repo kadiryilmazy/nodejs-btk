@@ -19,6 +19,20 @@ exports.getProducts = (req, res, next) => {
     });
 };
 
+exports.getProductsByCategoryId = (req, res, next) => {
+    const categoryId = req.params.categoryid;
+    const products = Product.getProductsByCategoryId(categoryId);
+    const categories = Category.getAll();
+
+    res.render("shop/products", {
+        title: "Products",
+        products: products,
+        path: "/products",
+        categories: categories,
+        selectedCategory: categoryId,
+    });
+};
+
 exports.getProduct = (req, res, next) => {
     const productId = req.params.productid;
     const product = Product.getById(productId);
