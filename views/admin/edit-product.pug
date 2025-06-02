@@ -23,11 +23,22 @@ block content
             .col-sm-10
                 input.form-control#image(type="text" name="imageUrl"
                 value=`${product.imageUrl}`) 
+        .form-group.row
+            label(for="categoryId").col-sm-2.col-form-label Category
+            .col-sm-10
+                select.form-control#categoryId(name="categoryId")
+                    option(value="-1") Select Category
+                    each category in categories
+                        option(
+                            value=category.id, 
+                            selected=(category.id === product.categoryId) ? 'selected' : false
+                        ) #{category.name}
 
         .form-group.row
             label(for="description").col-sm-2.col-form-label Description
             .col-sm-10
                 textarea(name="description" cols="30" rows="10") #{product.description}
+      
 
         .form-group.row
             .col-sm-10.offset-sm-2

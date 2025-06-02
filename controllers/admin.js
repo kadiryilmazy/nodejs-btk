@@ -1,4 +1,5 @@
 const Product = require("../models/product");
+const Category = require("../models/category");
 
 exports.getProducts = (req, res, next) => {
     const products = Product.getAll();
@@ -14,22 +15,30 @@ exports.getAddProduct = (req, res, next) => {
     res.render("admin/add-product", {
         title: " New Product",
         path: "/admin/add-product",
+        categories: Category.getAll(),
     });
 };
 
 exports.postAddProduct = (req, res, next) => {
-    console.log("Gelen veri:", req.body);
-    const product = new Product(req.body.name, req.body.price, req.body.imageUrl, req.body.description);
+    const product = new Product(
+        req.body.name,
+        req.body.price,
+        req.body.imageUrl,
+        req.body.description,
+        req.body.categoryId
+    );
     product.saveProduct();
     res.redirect("/");
 };
 
 exports.getEditProduct = (req, res, next) => {
     const product = Product.getById(req.params.productid);
+    const categories = Category.getAll();
     res.render("admin/edit-product", {
         title: "Edit Product",
         path: "/admin/products",
         product: product,
+        categories: categories,
     });
 };
 
@@ -39,7 +48,7 @@ exports.postEditProduct = (req, res, next) => {
     product.price = req.body.price;
     product.imageUrl = req.body.imageUrl;
     product.description = req.body.description;
-
+    product.categoryId = req.body.categoryId;
     res.redirect("/admin/products?action=edit");
 };
 
