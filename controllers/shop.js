@@ -2,21 +2,31 @@ const Product = require("../models/product");
 const Category = require("../models/category");
 
 exports.getIndex = (req, res, next) => {
-    const products = Product.getAll();
     const categories = Category.getAll();
-    res.render("shop/index", { title: "Shopping", products: products, path: "/", categories: categories });
+    Product.getAll()
+        .then((products) => {
+            res.render("shop/index", { title: "Shopping", products: products[0], path: "/", categories: categories });
+        })
+        .catch((err) => {
+            console.error("Error fetching products:", err);
+        });
 };
 
 exports.getProducts = (req, res, next) => {
-    const products = Product.getAll();
     const categories = Category.getAll();
-
-    res.render("shop/products", {
-        title: "Products",
-        products: products,
-        path: "/products",
-        categories: categories,
-    });
+    Product.getAll()
+        .then((products) => {
+            res.render("shop/products", {
+                title: "Products",
+                products: products[0],
+                path: "/products",
+                categories: categories,
+                action: req.query.action || "",
+            });
+        })
+        .catch((err) => {
+            console.error("Error fetching products:", err);
+        });
 };
 
 exports.getProductsByCategoryId = (req, res, next) => {
