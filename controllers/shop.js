@@ -19,7 +19,7 @@ exports.getProducts = (req, res, next) => {
             res.render("shop/products", {
                 title: "Products",
                 products: products[0],
-                path: "/products",
+                path: "/",
                 categories: categories,
                 action: req.query.action || "",
             });
@@ -43,14 +43,29 @@ exports.getProductsByCategoryId = (req, res, next) => {
     });
 };
 
-exports.getProduct = (req, res, next) => {
-    const productId = req.params.productid;
-    const product = Product.getById(productId);
-    res.render("shop/product-detail", {
-        title: product.name,
-        product: product,
-        path: "/products",
-    });
+exports.getProduct = async (req, res, next) => {
+    try {
+        const [productList] = await Product.getById(req.params.productid);
+        const product = productList[0];
+
+        if (!product) {
+            return res.status(404).render("errors/404", {
+                title: "Ürün Bulunamadı",
+                path: "/products",
+            });
+        }
+        res.render("shop/product-detail", {
+            title: product.name,
+            product,
+            path: "/products",
+        });
+    } catch (err) {
+        console.error("Ürün getirme hatası:", err);
+        res.status(500).render("errors/500", {
+            title: "Sunucu Hatası",
+            path: "/products",
+        });
+    }
 };
 
 exports.getProductsDetails = (req, res, next) => {
