@@ -33,7 +33,12 @@ exports.postAddProduct = (req, res, next) => {
         req.body.description,
         req.body.categoryId
     );
-    product.saveProduct();
+    product
+        .saveProduct()
+        .then(() => {
+            res.redirect("/");
+        })
+        .catch((err) => console.log(err));
     res.redirect("/");
 };
 
