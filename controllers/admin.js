@@ -83,6 +83,16 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.postDeleteProduct = (req, res, next) => {
-    Product.DeleteById(req.body.productid);
-    res.redirect("/admin/products?action=delete");
+    const productId = req.body.id;
+
+    if (!productId) {
+        console.error("HATA: Silinecek ürün ID'si gelmedi!", req.body);
+        return res.status(400).send("Ürün ID'si eksik!");
+    }
+
+    Product.deleteById(productId)
+        .then(() => {
+            res.redirect("/admin/products?action=delete");
+        })
+        .catch((err) => next(err));
 };
