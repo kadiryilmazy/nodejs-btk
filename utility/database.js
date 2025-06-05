@@ -1,15 +1,8 @@
-const mysql = require("mysql2");
+const Sequelize = require("sequelize");
 
-// 🔁 Bağlantı havuzu (Connection Pool) oluşturuluyor
-const pool = mysql.createPool({
+const sequelize = new Sequelize("node-app", "root", "mysql1234", {
+    dialect: "mysql",
     host: "localhost",
-    user: "root",
-    database: "node-app",
-    password: "mysql1234",
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
 });
 
-// ✨ Promise destekli bağlantı dışa aktarılıyor
-module.exports = pool.promise();
+module.exports = sequelize;
