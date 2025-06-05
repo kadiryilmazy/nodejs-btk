@@ -8,6 +8,15 @@ const path = require("path");
 app.set("view engine", "pug");
 app.set("views", "./views");
 
+//!SEQUELIZE
+const sequelize = require("./utility/database");
+sequelize
+    .sync()
+    .then((res) => {
+        console.log("Succesfully sync" + res);
+    })
+    .catch((err) => console.log("Sequelize sync error" + err));
+
 //  MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
