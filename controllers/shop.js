@@ -2,14 +2,14 @@ const Product = require("../models/product");
 const Category = require("../models/category");
 
 exports.getIndex = (req, res, next) => {
-    const categories = Category.getAll();
-    Product.getAll()
-        .then((products) => {
-            res.render("shop/index", { title: "Shopping", products: products[0], path: "/", categories: categories });
-        })
-        .catch((err) => {
-            console.error("Error fetching products:", err);
-        });
+    // const categories = Category.getAll();
+    // Product.getAll()
+    //     .then((products) => {
+    //         res.render("shop/index", { title: "Shopping", products: products[0], path: "/", categories: categories });
+    //     })
+    //     .catch((err) => {
+    //         console.error("Error fetching products:", err);
+    //     });
 };
 
 exports.getProducts = (req, res, next) => {
