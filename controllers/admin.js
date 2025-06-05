@@ -2,8 +2,6 @@ const Product = require("../models/product");
 const Category = require("../models/category");
 
 exports.getProducts = (req, res, next) => {
-    const products = Product.getAll();
-
     Product.getAll()
         .then((products) => {
             res.render("admin/products", {
@@ -19,12 +17,17 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getAddProduct = (req, res, next) => {
-    const categories = Category.getAll();
-    res.render("admin/add-product", {
-        title: "New Product",
-        path: "/admin/add-product",
-        categories: categories,
-    });
+    Category.getAll()
+        .then((categories) => {
+            res.render("admin/add-product", {
+                title: "New Product",
+                path: "/admin/add-product",
+                categories: categories[0],
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
 exports.postAddProduct = (req, res, next) => {
@@ -47,16 +50,21 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getEditProduct = (req, res, next) => {
-    const categories = Category.getAll();
-
     Product.getById(req.params.productid)
         .then((product) => {
-            res.render("admin/edit-product", {
-                title: "Edit Product",
-                path: "/admin/products",
-                product: product[0][0],
-                categories: categories,
-            });
+            Category.getAll()
+                .then((categories) => {
+                    console.log(categories);
+                    res.render("admin/edit-product", {
+                        title: "Edit Product",
+                        path: "/admin/products",
+                        product: product[0][0],
+                        categories: categories[0],
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         })
         .catch((err) => {
             console.log(err);
@@ -83,16 +91,11 @@ exports.postEditProduct = (req, res, next) => {
 };
 
 exports.postDeleteProduct = (req, res, next) => {
-    const productId = req.body.id;
-
-    if (!productId) {
-        console.error("HATA: Silinecek ürün ID'si gelmedi!", req.body);
-        return res.status(400).send("Ürün ID'si eksik!");
-    }
-
-    Product.deleteById(productId)
+    Product.DeleteById(req.body.productid)
         .then(() => {
             res.redirect("/admin/products?action=delete");
         })
-        .catch((err) => next(err));
+        .catch((err) => {
+            console.log(err);
+        });
 };
