@@ -84,22 +84,25 @@ exports.getEditProduct = (req, res, next) => {
 };
 
 exports.postEditProduct = (req, res, next) => {
-    const product = new Product();
-
-    product.id = req.body.id;
-    product.name = req.body.name;
-    product.price = req.body.price;
-    product.imageUrl = req.body.imageUrl;
-    product.description = req.body.description;
-    product.categoryid = req.body.categoryid;
-
-    Product.Update(product)
-        .then(() => {
+    const id = req.body.id;
+    const name = req.body.name;
+    const price = req.body.price;
+    const imageUrl = req.body.imageUrl;
+    const description = req.body.description;
+    const categoryid = req.body.categoryid;
+    Product.findByPk(id)
+        .then((product) => {
+            product.name = name;
+            product.price = price;
+            product.imageUrl = imageUrl;
+            product.description = description;
+            return product.save();
+        })
+        .then((result) => {
+            console.log("updated");
             res.redirect("/admin/products?action=edit");
         })
-        .catch((err) => {
-            console.log(err);
-        });
+        .catch((err) => console.log(err));
 };
 
 exports.postDeleteProduct = (req, res, next) => {
