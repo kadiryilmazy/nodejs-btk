@@ -63,16 +63,15 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getEditProduct = (req, res, next) => {
-    Product.getById(req.params.productid)
+    Product.findByPk(req.params.productid)
         .then((product) => {
-            Category.getAll()
+            Category.findAll()
                 .then((categories) => {
-                    console.log(categories);
                     res.render("admin/edit-product", {
                         title: "Edit Product",
                         path: "/admin/products",
-                        product: product[0][0],
-                        categories: categories[0],
+                        product: product,
+                        categories: categories,
                     });
                 })
                 .catch((err) => {
