@@ -8,10 +8,16 @@ const path = require("path");
 app.set("view engine", "pug");
 app.set("views", "./views");
 
+const Category = require("./models/category");
+const Product = require("./models/product");
+
 //!SEQUELIZE
+Product.hasOne(Category);
+Product.belongsTo(Category, { foreignKey: { allowNull: false } });
+Category.hasMany(Product);
 const sequelize = require("./utility/database");
 sequelize
-    .sync()
+    .sync({ force: true })
     .then((res) => {
         console.log("Succesfully sync" + res);
     })
