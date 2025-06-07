@@ -6,21 +6,68 @@ exports.getIndex = (req, res, next) => {
         attributes: ["id", "name", "price", "imageUrl"],
     })
         .then((products) => {
-            return Category.findAll().then((categories) => {
-                res.render("shop/index", {
-                    title: "Shopping",
-                    products: products,
-                    categories: categories,
-                    path: "/",
+            Category.findAll()
+                .then((categories) => {
+                    res.render("shop/index", {
+                        title: "Shopping",
+                        products: products,
+                        categories: categories,
+                        path: "/",
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
                 });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
+
+exports.getProducts = (req, res, next) => {
+    Product.findAll({
+        attributes: ["id", "name", "price", "imageUrl"],
+    })
+        .then((products) => {
+            Category.findAll()
+                .then((categories) => {
+                    res.render("shop/products", {
+                        title: "Products",
+                        products: products,
+                        categories: categories,
+                        path: "/",
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
+
+exports.getProductsByCategoryId = (req, res, next) => {
+    const categoryid = req.params.categoryid;
+    const model = [];
+
+    Category.findAll()
+        .then((categories) => {
+            model.categories = categories;
+            const category = categories.find((i) => i.id == categoryid);
+            return category.getProducts();
+        })
+        .then((products) => {
+            res.render("shop/products", {
+                title: "Products",
+                products: products,
+                categories: model.categories,
+                selectedCategory: categoryid,
+                path: "/products",
             });
         })
         .catch((err) => {
-            console.log("getIndex error:", err);
-            res.status(500).render("errors/500", {
-                title: "Sunucu Hatası",
-                path: "/",
-            });
+            console.log(err);
         });
 };
 
@@ -53,41 +100,6 @@ exports.getProduct = (req, res, next) => {
             console.log(err);
         });
         */
-};
-
-exports.getProducts = (req, res, next) => {
-    Product.findAll()
-        .then((products) => {
-            Category.findAll()
-                .then((categories) => {
-                    res.render("shop/products", {
-                        title: "Products",
-                        products: products,
-                        categories: categories,
-                        path: "/",
-                    });
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-};
-
-exports.getProductsByCategoryId = (req, res, next) => {
-    const categoryid = req.params.categoryid;
-    const products = Product.getProductsByCategoryId(categoryid);
-    const categories = Category.getAll();
-
-    res.render("shop/products", {
-        title: "Products",
-        products: products,
-        categories: categories,
-        selectedCategory: categoryid,
-        path: "/products",
-    });
 };
 
 exports.getCart = (req, res, next) => {

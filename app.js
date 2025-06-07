@@ -12,16 +12,26 @@ const Category = require("./models/category");
 const Product = require("./models/product");
 
 //!SEQUELIZE
-Product.hasOne(Category);
+Category.hasMany(Product, { onDelete: "CASCADE" });
 Product.belongsTo(Category, { foreignKey: { allowNull: false } });
-Category.hasMany(Product);
+
 const sequelize = require("./utility/database");
+
 sequelize
-    .sync({ force: true })
-    .then((res) => {
-        console.log("Succesfully sync" + res);
+    //.sync({ force: true }) // Geliştirme sırasında sıfırlamak için
+    .sync()
+    .then(() => {
+        Category.count().then((count) => {
+            if (count === 0) {
+                Category.bulkCreate([
+                    { name: "Telefon", description: "Telefon Kategorisi" },
+                    { name: "Bilgisayar", description: "Bilgisayar Kategorisi" },
+                    { name: "Elektronik", description: "Elektronik Kategorisi" },
+                ]);
+            }
+        });
     })
-    .catch((err) => console.log("Sequelize sync error" + err));
+    .catch((err) => console.log("Sequelize sync error: " + err));
 
 //  MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: false }));
