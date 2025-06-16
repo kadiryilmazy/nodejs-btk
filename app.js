@@ -49,10 +49,11 @@ Product.belongsToMany(Cart, { through: CartItem });
 Cart.belongsTo(User);
 Cart.belongsToMany(Product, { through: CartItem });
 
+let _user;
 const sequelize = require("./utility/database");
 sequelize
-    .sync({ force: true })
-    // .sync()
+    // .sync({ force: true })
+    .sync()
     .then(() => {
         return User.findByPk(1)
             .then((user) => {
@@ -62,6 +63,16 @@ sequelize
                 return user;
             })
             .then((user) => {
+                _user = user;
+                user.getCart();
+            })
+            .then((cart) => {
+                if (!cart) {
+                    return _user.createCart();
+                }
+                return cart;
+            })
+            .then(() => {
                 Category.count().then((count) => {
                     if (count === 0) {
                         Category.bulkCreate([
