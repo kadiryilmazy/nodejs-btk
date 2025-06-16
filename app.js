@@ -10,29 +10,43 @@ app.set("views", "./views");
 
 const Category = require("./models/category");
 const Product = require("./models/product");
+const User = require("./models/user");
 
 //!SEQUELIZE
 Category.hasMany(Product, { onDelete: "CASCADE" });
 Product.belongsTo(Category, { foreignKey: { allowNull: false } });
 
+Product.belongsTo(User);
+User.hasMany(Product);
+
 const sequelize = require("./utility/database");
 
 sequelize
-    //.sync({ force: true }) // Geliştirme sırasında sıfırlamak için
-    .sync()
+    .sync({ force: true })
+    //.sync()
     .then(() => {
-        Category.count().then((count) => {
-            if (count === 0) {
-                Category.bulkCreate([
-                    { name: "Telefon", description: "Telefon Kategorisi" },
-                    { name: "Bilgisayar", description: "Bilgisayar Kategorisi" },
-                    { name: "Elektronik", description: "Elektronik Kategorisi" },
-                ]);
-            }
-        });
+        User.findByPk(1)
+            .then((user) => {
+                if (!user) {
+                    User.create({ name: "kadiryilmazy", email: "email@gmail.com" });
+                }
+                return user;
+            })
+            .then((user) => {
+                Category.count().then((count) => {
+                    if (count === 0) {
+                        Category.bulkCreate([
+                            { name: "Telefon", description: "telefon kategorisi" },
+                            { name: "Bilgisayar", description: "bilgisayar kategorisi" },
+                            { name: "Elektronik", description: "elektronik kategorisi" },
+                        ]);
+                    }
+                });
+            });
     })
-    .catch((err) => console.log("Sequelize sync error: " + err));
-
+    .catch((err) => {
+        console.log(err);
+    });
 //  MIDDLEWARE
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
