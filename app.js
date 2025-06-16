@@ -28,6 +28,8 @@ app.use((req, res, next) => {
 //ROUTES
 const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/shop");
+const Cart = require("./models/cart");
+const CartItem = require("./models/cartItem");
 app.use("/admin", adminRoutes);
 app.use(userRoutes);
 
@@ -35,15 +37,22 @@ app.use(userRoutes);
 const Category = require("./models/category");
 const Product = require("./models/product");
 
+//DB RELATIONSHIPS
+User.hasOne(Cart);
+User.hasMany(Product);
+
 Category.hasMany(Product, { onDelete: "CASCADE" });
 Product.belongsTo(Category, { foreignKey: { allowNull: false } });
 Product.belongsTo(User);
-User.hasMany(Product);
+Product.belongsToMany(Cart, { through: CartItem });
+
+Cart.belongsTo(User);
+Cart.belongsToMany(Product, { through: CartItem });
 
 const sequelize = require("./utility/database");
 sequelize
-    // .sync({ force: true })
-    .sync()
+    .sync({ force: true })
+    // .sync()
     .then(() => {
         return User.findByPk(1)
             .then((user) => {
