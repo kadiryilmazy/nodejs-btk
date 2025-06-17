@@ -30,6 +30,9 @@ const adminRoutes = require("./routes/admin");
 const userRoutes = require("./routes/shop");
 const Cart = require("./models/cart");
 const CartItem = require("./models/cartItem");
+const Order = require("./models/order");
+const OrderItem = require("./models/orderItem");
+
 app.use("/admin", adminRoutes);
 app.use(userRoutes);
 
@@ -40,14 +43,19 @@ const Product = require("./models/product");
 //DB RELATIONSHIPS
 User.hasOne(Cart);
 User.hasMany(Product);
+User.hasMany(Order);
 
 Category.hasMany(Product, { onDelete: "CASCADE" });
 Product.belongsTo(Category, { foreignKey: { allowNull: false } });
 Product.belongsTo(User);
 Product.belongsToMany(Cart, { through: CartItem });
+Product.belongsToMany(Order, { through: OrderItem });
 
 Cart.belongsTo(User);
 Cart.belongsToMany(Product, { through: CartItem });
+
+Order.belongsTo(User);
+Order.belongsToMany(Product, { through: OrderItem });
 
 let _user;
 const sequelize = require("./utility/database");
