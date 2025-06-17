@@ -1,0 +1,22 @@
+nav.navbar.navbar-expand-lg.navbar-dark.bg-primary.fixed-top
+  .container
+    a.navbar-brand(href="/") Shopping
+    ul.navbar-nav.mr-auto
+      li.nav-item
+        a.nav-link(class=(path == '/' ? 'active' : ''), href="/") Home
+      li.nav-item
+        a.nav-link(class=(path == '/products' ? 'active' : ''), href="/products") Products
+      li.nav-item
+       a.nav-link(class=(path == '/cart' ? 'active' : ''), href="/cart") Cart
+      li.nav-item
+       a.nav-link(class=(path == '/orders' ? 'active' : ''), href="/orders") Orders
+      li.nav-item
+        a.nav-link(class=(path == '/admin/add-product' ? 'active' : ''), href="/admin/add-product") Add Product
+         li.nav-item
+        a.nav-link(class=(path == '/admin/products' ? 'active' : ''), href="/admin/products") Admin Product
+
+    ul.navbar-nav.ml-auto
+      li.nav-item
+        a.nav-link(href="/login") Login
+      li.nav-item
+        a.nav-link(href="/register") Register
