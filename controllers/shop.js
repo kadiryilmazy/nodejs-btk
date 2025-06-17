@@ -2,80 +2,209 @@ const Product = require("../models/product");
 const Category = require("../models/category");
 
 exports.getIndex = (req, res, next) => {
-    const categories = Category.getAll();
-    Product.getAll()
+    Product.findAll({
+        attributes: ["id", "name", "price", "imageUrl"],
+    })
         .then((products) => {
-            res.render("shop/index", { title: "Shopping", products: products[0], path: "/", categories: categories });
+            Category.findAll()
+                .then((categories) => {
+                    res.render("shop/index", {
+                        title: "Shopping",
+                        products: products,
+                        categories: categories,
+                        path: "/",
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         })
         .catch((err) => {
-            console.error("Error fetching products:", err);
+            console.log(err);
         });
 };
 
 exports.getProducts = (req, res, next) => {
-    const categories = Category.getAll();
-    Product.getAll()
+    Product.findAll({
+        attributes: ["id", "name", "price", "imageUrl"],
+    })
         .then((products) => {
-            res.render("shop/products", {
-                title: "Products",
-                products: products[0],
-                path: "/",
-                categories: categories,
-                action: req.query.action || "",
-            });
+            Category.findAll()
+                .then((categories) => {
+                    res.render("shop/products", {
+                        title: "Products",
+                        products: products,
+                        categories: categories,
+                        path: "/",
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         })
         .catch((err) => {
-            console.error("Error fetching products:", err);
+            console.log(err);
         });
 };
 
 exports.getProductsByCategoryId = (req, res, next) => {
-    const categoryId = req.params.categoryid;
-    const products = Product.getProductsByCategoryId(categoryId);
-    const categories = Category.getAll();
+    const categoryid = req.params.categoryid;
+    const model = [];
 
-    res.render("shop/products", {
-        title: "Products",
-        products: products,
-        path: "/products",
-        categories: categories,
-        selectedCategory: categoryId,
-    });
-};
-
-exports.getProduct = async (req, res, next) => {
-    try {
-        const [productList] = await Product.getById(req.params.productid);
-        const product = productList[0];
-
-        if (!product) {
-            return res.status(404).render("errors/404", {
-                title: "Ürün Bulunamadı",
+    Category.findAll()
+        .then((categories) => {
+            model.categories = categories;
+            const category = categories.find((i) => i.id == categoryid);
+            return category.getProducts();
+        })
+        .then((products) => {
+            res.render("shop/products", {
+                title: "Products",
+                products: products,
+                categories: model.categories,
+                selectedCategory: categoryid,
                 path: "/products",
             });
-        }
-        res.render("shop/product-detail", {
-            title: product.name,
-            product,
-            path: "/products",
+        })
+        .catch((err) => {
+            console.log(err);
         });
-    } catch (err) {
-        console.error("Ürün getirme hatası:", err);
-        res.status(500).render("errors/500", {
-            title: "Sunucu Hatası",
-            path: "/products",
-        });
-    }
 };
 
-exports.getProductsDetails = (req, res, next) => {
-    res.render("shop/details", { title: "Details", path: "/details" });
+exports.getProduct = (req, res, next) => {
+    Product.findAll({
+        attributes: ["id", "name", "price", "imageUrl", "description"],
+        where: { id: req.params.productid },
+    })
+        .then((products) => {
+            res.render("shop/product-detail", {
+                title: products[0].name,
+                product: products[0],
+                path: "/products",
+            });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
 };
 
 exports.getCart = (req, res, next) => {
-    res.render("shop/cart", { title: "Cart", path: "/cart" });
+    req.user
+        .getCart()
+        .then((cart) => {
+            return cart
+                .getProducts()
+                .then((products) => {
+                    res.render("shop/cart", {
+                        title: "Cart",
+                        path: "/cart",
+                        products: products,
+                    });
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
+
+exports.postCart = (req, res, next) => {
+    const productId = req.body.productId;
+    let quantity = 1;
+    let userCart;
+
+    req.user
+        .getCart()
+        .then((cart) => {
+            userCart = cart;
+            return cart.getProducts({ where: { id: productId } });
+        })
+        .then((products) => {
+            let product;
+
+            if (products.length > 0) {
+                product = products[0];
+            }
+
+            if (product) {
+                quantity += product.cartItem.quantity;
+                return product;
+            }
+            return Product.findByPk(productId);
+        })
+        .then((product) => {
+            userCart.addProduct(product, {
+                through: {
+                    quantity: quantity,
+                },
+            });
+        })
+        .then(() => {
+            res.redirect("/cart");
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+};
+
+exports.postCartItemDelete = (req, res, next) => {
+    const productid = req.body.productid;
+
+    req.user
+        .getCart()
+        .then((cart) => {
+            return cart.getProducts({ where: { id: productid } });
+        })
+        .then((products) => {
+            const product = products[0];
+            return product.cartItem.destroy();
+        })
+        .then((result) => {
+            res.redirect("/cart");
+        });
 };
 
 exports.getOrders = (req, res, next) => {
-    res.render("shop/orders", { title: "Orders", path: "/orders" });
+    req.user.getOrders({ include: ["products"] }).then((orders) => {
+        res.render("shop/orders", {
+            title: "Orders",
+            path: "/orders",
+            orders: orders,
+        });
+    });
+};
+
+exports.postOrder = (req, res, next) => {
+    let userCart;
+
+    req.user
+        .getCart()
+        .then((cart) => {
+            userCart = cart;
+            return cart.getProducts();
+        })
+        .then((products) => {
+            return req.user.createOrder().then((order) => {
+                return order.addProducts(
+                    products.map((product) => {
+                        product.orderItem = {
+                            quantity: product.cartItem.quantity,
+                            price: product.price,
+                        };
+                        return product;
+                    })
+                );
+            });
+        })
+        .then(() => {
+            return userCart.setProducts(null);
+        })
+        .then(() => {
+            res.redirect("/orders");
+        })
+        .catch((err) => {
+            console.log("Sipariş oluşturulurken hata:", err);
+        });
 };

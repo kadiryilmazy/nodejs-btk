@@ -1,19 +1,16 @@
 const Sequelize = require("sequelize");
+
 const sequelize = require("../utility/database");
 
-const Category = sequelize.define("category", {
+const User = sequelize.define("user", {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true,
     },
-    name: {
-        type: Sequelize.STRING,
-    },
-    description: {
-        type: Sequelize.STRING,
-    },
+    name: Sequelize.STRING,
+    email: Sequelize.STRING,
 });
 
-module.exports = Category;
+module.exports = User;

@@ -19,21 +19,20 @@ block content
             label(for="imageUrl").col-sm-2.col-form-label Image
             .col-sm-10
                 input.form-control#image(type="text" name="imageUrl") 
+
         .form-group.row
-            label(for="categoryId").col-sm-2.col-form-label Category
+            label(for="categoryid").col-sm-2.col-form-label Category
             .col-sm-10
-                select.form-control#categoryId( name="categoryId") 
-                        option(value="-1") Select Category
-                        each category in categories
-                            option(value=`${category.id}`) #{category.name}
-                            
+                select.form-control#categoryid(name="categoryid")
+                    option(value="-1") Select Category
+                    each category in categories
+                        option(value=`${category.id}`) #{category.name}
 
         .form-group.row
             label(for="description").col-sm-2.col-form-label Description
             .col-sm-10
-                textarea.form-control#description(name="description" rows="10"  required)
-
-
+                textarea.form-control(name="description" cols="30" rows="10") 
+                
         .form-group.row
             .col-sm-10.offset-sm-2
                 input(type="submit" value="Save Product").btn.btn-primary   
