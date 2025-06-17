@@ -1,8 +1,19 @@
-const Sequelize = require("sequelize");
+require("dotenv").config();
+const mongodb = require("mongodb");
+const MongoClient = mongodb.MongoClient;
 
-const sequelize = new Sequelize("node-app", "root", "mysql1234", {
-    dialect: "mysql",
-    host: "localhost",
-});
+const mongoCon = (callback) => {
+    const uri = process.env.MONGO_URI;
+    MongoClient.connect(uri)
 
-module.exports = sequelize;
+        .then((client) => {
+            console.log("connected");
+            callback(client);
+        })
+        .catch((err) => {
+            console.log(err);
+            throw err;
+        });
+};
+
+module.exports = mongoCon;
