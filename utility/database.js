@@ -1,15 +1,19 @@
-const mysql = require("mysql2");
+require("dotenv").config();
+const mongodb = require("mongodb");
+const MongoClient = mongodb.MongoClient;
 
-// 🔁 Bağlantı havuzu (Connection Pool) oluşturuluyor
-const pool = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    database: "node-app",
-    password: "mysql1234",
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-});
+const mongoCon = (callback) => {
+    const uri = process.env.MONGO_URI;
+    MongoClient.connect(uri)
 
-// ✨ Promise destekli bağlantı dışa aktarılıyor
-module.exports = pool.promise();
+        .then((client) => {
+            console.log("connected");
+            callback(client);
+        })
+        .catch((err) => {
+            console.log(err);
+            throw err;
+        });
+};
+
+module.exports = mongoCon;
