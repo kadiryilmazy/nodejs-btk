@@ -86,20 +86,6 @@ exports.getProduct = (req, res, next) => {
         .catch((err) => {
             console.log(err);
         });
-
-    /*
-    Product.findByPk(req.params.productid)
-        .then((product) => {
-            res.render('shop/product-detail', {
-                title: product.name,
-                product: product,
-                path: '/products'
-            });
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-        */
 };
 
 exports.getCart = (req, res, next) => {
@@ -115,25 +101,20 @@ exports.getCart = (req, res, next) => {
                         products: products,
                     });
                 })
-                .catch(() => {
-                    console.log("Error getting cart products");
+                .catch((err) => {
+                    console.log(err);
                 });
         })
-        .catch(() => {
-            console.log("Error getting cart products");
+        .catch((err) => {
+            console.log(err);
         });
-};
-exports.getOrders = (req, res, next) => {
-    res.render("shop/orders", {
-        title: "Orders",
-        path: "/orders",
-    });
 };
 
 exports.postCart = (req, res, next) => {
     const productId = req.body.productId;
     let quantity = 1;
     let userCart;
+
     req.user
         .getCart()
         .then((cart) => {
@@ -142,9 +123,11 @@ exports.postCart = (req, res, next) => {
         })
         .then((products) => {
             let product;
+
             if (products.length > 0) {
                 product = products[0];
             }
+
             if (product) {
                 quantity += product.cartItem.quantity;
                 return product;
@@ -153,35 +136,75 @@ exports.postCart = (req, res, next) => {
         })
         .then((product) => {
             userCart.addProduct(product, {
-                through: { quantity: quantity },
+                through: {
+                    quantity: quantity,
+                },
             });
-        })
-        .catch(() => {
-            console.log("Error getting cart products");
-        });
-};
-
-exports.postCartItemDelete = (req, res, next) => {
-    const productId = req.body.productid;
-
-    req.user
-        .getCart()
-        .then((cart) => {
-            return cart.getProducts({ where: { id: productId } });
-        })
-        .then((products) => {
-            if (!products || products.length === 0) {
-                throw new Error("Ürün sepette bulunamadı.");
-            }
-
-            const product = products[0];
-            return product.cartItem.destroy();
         })
         .then(() => {
             res.redirect("/cart");
         })
         .catch((err) => {
-            console.error("Sepetten ürün silinirken hata oluştu:", err);
-            next(err); // Hata middleware’ine yönlendirme
+            console.log(err);
+        });
+};
+
+exports.postCartItemDelete = (req, res, next) => {
+    const productid = req.body.productid;
+
+    req.user
+        .getCart()
+        .then((cart) => {
+            return cart.getProducts({ where: { id: productid } });
+        })
+        .then((products) => {
+            const product = products[0];
+            return product.cartItem.destroy();
+        })
+        .then((result) => {
+            res.redirect("/cart");
+        });
+};
+
+exports.getOrders = (req, res, next) => {
+    req.user.getOrders({ include: ["products"] }).then((orders) => {
+        res.render("shop/orders", {
+            title: "Orders",
+            path: "/orders",
+            orders: orders,
+        });
+    });
+};
+
+exports.postOrder = (req, res, next) => {
+    let userCart;
+
+    req.user
+        .getCart()
+        .then((cart) => {
+            userCart = cart;
+            return cart.getProducts();
+        })
+        .then((products) => {
+            return req.user.createOrder().then((order) => {
+                return order.addProducts(
+                    products.map((product) => {
+                        product.orderItem = {
+                            quantity: product.cartItem.quantity,
+                            price: product.price,
+                        };
+                        return product;
+                    })
+                );
+            });
+        })
+        .then(() => {
+            return userCart.setProducts(null);
+        })
+        .then(() => {
+            res.redirect("/orders");
+        })
+        .catch((err) => {
+            console.log("Sipariş oluşturulurken hata:", err);
         });
 };

@@ -60,7 +60,7 @@ Order.belongsToMany(Product, { through: OrderItem });
 let _user;
 const sequelize = require("./utility/database");
 sequelize
-    // .sync({ force: true })
+    //.sync({ force: true })
     .sync()
     .then(() => {
         return User.findByPk(1)
