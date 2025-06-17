@@ -156,10 +156,32 @@ exports.postCart = (req, res, next) => {
                 through: { quantity: quantity },
             });
         })
+        .catch(() => {
+            console.log("Error getting cart products");
+        });
+};
+
+exports.postCartItemDelete = (req, res, next) => {
+    const productId = req.body.productid;
+
+    req.user
+        .getCart()
+        .then((cart) => {
+            return cart.getProducts({ where: { id: productId } });
+        })
+        .then((products) => {
+            if (!products || products.length === 0) {
+                throw new Error("Ürün sepette bulunamadı.");
+            }
+
+            const product = products[0];
+            return product.cartItem.destroy();
+        })
         .then(() => {
             res.redirect("/cart");
         })
-        .catch(() => {
-            console.log("Error getting cart products");
+        .catch((err) => {
+            console.error("Sepetten ürün silinirken hata oluştu:", err);
+            next(err); // Hata middleware’ine yönlendirme
         });
 };
