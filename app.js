@@ -7,21 +7,21 @@ const path = require("path");
 app.set("view engine", "pug");
 app.set("views", "./views");
 
-// const adminRoutes = require('./routes/admin');
+const adminRoutes = require("./routes/admin");
 // const userRoutes = require('./routes/shop');
 
 const errorController = require("./controllers/errors");
-const mongoCon = require("./utility/database");
+const { mongoConnect } = require("./utility/database");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// app.use('/admin', adminRoutes);
+app.use("/admin", adminRoutes);
 // app.use(userRoutes);
 
 app.use(errorController.get404Page);
 
-mongoCon((client) => {
+mongoConnect((client) => {
     app.listen(3000);
     console.log(client);
 });
