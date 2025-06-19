@@ -25,7 +25,8 @@ class Product {
         const db = getDb();
         return db
             .collection("products")
-            .find({})
+            .find()
+            .project({ description: 0 })
             .toArray()
             .then((products) => {
                 return products;
