@@ -29,7 +29,7 @@ exports.postAddProduct = (req, res, next) => {
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
 
-    const product = new Product(name, price, description, imageUrl);
+    const product = new Product(name, price, description, imageUrl, null, req.user._id);
 
     product
         .save()
@@ -60,7 +60,7 @@ exports.postEditProduct = (req, res, next) => {
     const description = req.body.description;
     //const categoryid = req.body.categoryid;
 
-    const product = new Product(name, price, description, imageUrl, id);
+    const product = new Product(name, price, description, imageUrl, id, req.user._id);
 
     product
         .save()

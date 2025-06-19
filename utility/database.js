@@ -8,8 +8,8 @@ const mongoConnect = (callback) => {
     const uri = process.env.MONGO_URI;
 
     MongoClient.connect(uri, {
-        useNewUrlParser: true, // URL'yi daha doğru analiz eder
-        useUnifiedTopology: true, // Yeni sunucu keşif ve izleme motoru
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
     })
         .then((client) => {
             _db = client.db("node-app");
