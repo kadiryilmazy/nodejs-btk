@@ -6,7 +6,7 @@ block styles
 block content
     form(action="/admin/products" method="POST")
  
-        input(type="hidden" name="id" value=`${product.id}`)
+        input(type="hidden" name="id" value=`${product._id}`)
 
         .form-group.row
             label(for="name").col-sm-2.col-form-label Product Name
