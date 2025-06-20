@@ -45,7 +45,6 @@ class Category {
             .find()
             .toArray()
             .then((categories) => {
-                console.log("Categories found:", categories);
                 return categories;
             })
             .catch((error) => {
@@ -61,7 +60,6 @@ class Category {
             .find({ _id: new mongodb.ObjectId(categoryid) })
             .next()
             .then((category) => {
-                console.log("Category found:", category);
                 return category;
             })
             .catch((error) => {
