@@ -1,34 +1,38 @@
 const Product = require("../models/product");
-//const Category = require("../models/category");
+const Category = require("../models/category");
 
 exports.getIndex = (req, res, next) => {
-    Product.findAll()
-        .then((products) => {
-            res.render("shop/index", {
-                title: "Shopping",
-                products: products,
-                path: "/",
-            }).catch((err) => {
+    Product.findAll().then((products) => {
+        Category.findAll()
+            .then((categories) => {
+                res.render("shop/index", {
+                    title: "Shopping",
+                    products: products,
+                    path: "/",
+                    categories: categories,
+                });
+            })
+            .catch((err) => {
                 console.log(err);
             });
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+    });
 };
 
 exports.getProducts = (req, res, next) => {
-    Product.findAll()
-        .then((products) => {
-            res.render("shop/products", {
-                title: "Products",
-                products: products,
-                path: "/",
+    Product.findAll().then((products) => {
+        Category.findAll()
+            .then((categories) => {
+                res.render("shop/index", {
+                    title: "Shopping",
+                    products: products,
+                    path: "/",
+                    categories: categories,
+                });
+            })
+            .catch((err) => {
+                console.log(err);
             });
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+    });
 };
 
 exports.getProductsByCategoryId = (req, res, next) => {
@@ -38,8 +42,7 @@ exports.getProductsByCategoryId = (req, res, next) => {
     Category.findAll()
         .then((categories) => {
             model.categories = categories;
-            const category = categories.find((i) => i.id == categoryid);
-            return category.getProducts();
+            return Product.findByCategoryId(categoryid);
         })
         .then((products) => {
             res.render("shop/products", {
