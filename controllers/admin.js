@@ -47,25 +47,11 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getEditProduct = (req, res, next) => {
-    Product.findById(req.params.productid).then((products) => {
-        Category.findAll().then((categories) => {
-            categories = categories.map((category) => {
-                if (products.categories) {
-                    products.categories.find((item) => {
-                        if (item == category._id) {
-                            category.selected = true;
-                        }
-                    });
-                }
-                return category;
-            });
-            products.categories = categories;
-            res.render("admin/edit-product", {
-                title: "Edit Product",
-                path: "/admin/products",
-                product: products,
-                categories: categories,
-            });
+    Product.findById(req.params.productid).then((product) => {
+        res.render("admin/edit-product", {
+            title: "Edit Product",
+            path: "/admin/products",
+            product: product,
         });
     });
 };
@@ -76,14 +62,37 @@ exports.postEditProduct = (req, res, next) => {
     const price = req.body.price;
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
-    const categories = req.body.categoryids;
-    const product = new Product(name, price, description, imageUrl, categories, id, req.user._id);
-    product
-        .save()
-        .then((result) => {
+
+    Product.update(
+        { _id: id },
+        {
+            $set: {
+                name: name,
+                price: price,
+                imageUrl: imageUrl,
+                description: description,
+            },
+        }
+    )
+        .then(() => {
             res.redirect("/admin/products?action=edit");
         })
         .catch((err) => console.log(err));
+
+    /*
+    Product.findById(id)
+        .then(product => {
+            product.name = name;
+            product.price = price;
+            product.imageUrl = imageUrl;
+            product.description = description
+            return product.save()
+        })
+        .then(() => {
+            res.redirect('/admin/products?action=edit');
+        })
+        .catch(err => console.log(err));
+        */
 };
 
 exports.postDeleteProduct = (req, res, next) => {
