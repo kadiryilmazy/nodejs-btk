@@ -9,6 +9,7 @@ class Product {
         this.imageUrl = imageUrl;
         this.categories = categories;
         this._id = id ? new mongodb.ObjectID(id) : null;
+        this.categories = categories && !Array.isArray(categories) ? Array.of(categories) : categories;
         this.userId = userId;
     }
 
