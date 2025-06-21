@@ -2,7 +2,7 @@ const Product = require("../models/product");
 const Category = require("../models/category");
 
 exports.getProducts = (req, res, next) => {
-    Product.findAll()
+    Product.find()
         .then((products) => {
             res.render("admin/products", {
                 title: "Admin Products",
