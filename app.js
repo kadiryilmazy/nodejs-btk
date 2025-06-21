@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, "public"))); // Statik dosyalar (CSS
 app.use((req, res, next) => {
     User.findByUserName("admin")
         .then((user) => {
-            req.user = new User(user.name, user.email, user._id); // Kullanıcıyı request objesine ekle
+            req.user = new User(user.name, user.email, user.cart, user._id); // Kullanıcıyı request objesine ekle
             next();
         })
         .catch((err) => {
