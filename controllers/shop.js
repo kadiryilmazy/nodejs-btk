@@ -4,13 +4,10 @@ const Category = require("../models/category");
 exports.getIndex = (req, res, next) => {
     Product.find()
         .then((products) => {
-            Category.findAll().then((categories) => {
-                res.render("shop/index", {
-                    title: "Shopping",
-                    products: products,
-                    path: "/",
-                    categories: categories,
-                });
+            res.render("shop/index", {
+                title: "Shopping",
+                products: products,
+                path: "/",
             });
         })
         .catch((err) => {
@@ -19,15 +16,12 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getProducts = (req, res, next) => {
-    Product.findAll()
+    Product.find()
         .then((products) => {
-            Category.findAll().then((categories) => {
-                res.render("shop/products", {
-                    title: "Products",
-                    products: products,
-                    path: "/",
-                    categories: categories,
-                });
+            res.render("shop/products", {
+                title: "Products",
+                products: products,
+                path: "/",
             });
         })
         .catch((err) => {
