@@ -24,11 +24,11 @@ const { mongoConnect } = require("./utility/database");
 
 app.use(bodyParser.urlencoded({ extended: false })); // Form verisi çözümleme
 app.use(express.static(path.join(__dirname, "public"))); // Statik dosyalar (CSS, JS, img)
-/*
+
 app.use((req, res, next) => {
-    User.findByUserName("admin")
+    User.findOne({ name: "admin" })
         .then((user) => {
-            req.user = new User(user.name, user.email, user.cart, user._id); // Kullanıcıyı request objesine ekle
+            req.user = user; // Kullanıcıyı request objesine ekle
             next();
         })
         .catch((err) => {
@@ -36,7 +36,7 @@ app.use((req, res, next) => {
             next(err);
         });
 });
-*/
+
 //! ==================== ROUTE YÖNLENDİRMELERİ ====================
 app.use("/admin", adminRoutes); // Admin paneli yolları
 app.use(userRoutes); // Kullanıcı tarafı yollar
