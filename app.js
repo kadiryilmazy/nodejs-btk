@@ -51,6 +51,29 @@ mongoose
     .then(async () => {
         console.log("✅ MongoDB bağlantısı başarılı");
 
+        User.findOne({ name: "admin" })
+            .then((user) => {
+                if (!user) {
+                    const newUser = new User({
+                        name: "admin",
+                        email: "email@admin.com",
+                        cart: { items: [] },
+                    });
+
+                    newUser
+                        .save()
+                        .then(() => {
+                            console.log("Admin user created.");
+                        })
+                        .catch((err) => {
+                            console.error("Error saving admin user:", err);
+                        });
+                }
+            })
+            .catch((err) => {
+                console.error("Error fetching user:", err);
+            });
+
         app.listen(3000, () => {
             console.log("🚀 Sunucu 3000 portunda çalışıyor");
         });
