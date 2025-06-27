@@ -1,7 +1,7 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 
-const connectDB = async () => {
+const mongoConnect = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI, {
             useNewUrlParser: true,
@@ -14,4 +14,12 @@ const connectDB = async () => {
     }
 };
 
-module.exports = connectDB;
+const getdb = () => {
+    if (mongoose.connection.readyState === 1) {
+        return mongoose.connection;
+    }
+    throw new Error("No Database Connection");
+};
+
+exports.mongoConnect = mongoConnect;
+exports.getdb = getdb;

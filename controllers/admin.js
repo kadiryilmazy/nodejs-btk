@@ -3,6 +3,8 @@ const Category = require("../models/category");
 
 exports.getProducts = (req, res, next) => {
     Product.find()
+        .populate("userId", "name -_id")
+        .select("name price userId imageUrl")
         .then((products) => {
             res.render("admin/products", {
                 title: "Admin Products",
@@ -117,7 +119,10 @@ exports.postAddCategory = (req, res, next) => {
     const name = req.body.name;
     const description = req.body.description;
 
-    const category = new Category(name, description);
+    const category = new Category({
+        name: name,
+        description: description,
+    });
 
     category
         .save()
@@ -130,7 +135,7 @@ exports.postAddCategory = (req, res, next) => {
 };
 
 exports.getCategories = (req, res, next) => {
-    Category.findAll()
+    Category.find()
         .then((categories) => {
             res.render("admin/categories", {
                 title: "Categories",
@@ -157,12 +162,23 @@ exports.postEditCategory = (req, res, next) => {
     const name = req.body.name;
     const description = req.body.description;
 
-    const category = new Category(name, description, id);
-
-    category
-        .save()
+    Category.findById(id)
+        .then((category) => {
+            category.name = name;
+            category.description = description;
+            return category.save();
+        })
         .then(() => {
             res.redirect("/admin/categories?action=edit");
+        })
+        .catch((err) => console.log(err));
+};
+
+exports.postDeleteCategory = (req, res, next) => {
+    const id = req.body.categoryid;
+    Category.findByIdAndDelete(id)
+        .then(() => {
+            res.redirect("/admin/categories?action=delete");
         })
         .catch((err) => {
             console.log(err);
