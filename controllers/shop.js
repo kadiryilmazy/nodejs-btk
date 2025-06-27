@@ -1,5 +1,6 @@
 const Product = require("../models/product");
 const Category = require("../models/category");
+const user = require("../models/user");
 
 exports.getIndex = (req, res, next) => {
     Product.find()
@@ -80,13 +81,12 @@ exports.getProduct = (req, res, next) => {
 
 exports.getCart = (req, res, next) => {
     req.user
-        .getCart()
-        .then((products) => {
-            console.log(products);
+        .populate("cart.items.productId")
+        .then((user) => {
             res.render("shop/cart", {
                 title: "Cart",
                 path: "/cart",
-                products: products,
+                products: user.cart.items,
             });
         })
         .catch((err) => {
