@@ -4,10 +4,15 @@ const Category = require("../models/category");
 exports.getIndex = (req, res, next) => {
     Product.find()
         .then((products) => {
-            res.render("shop/index", {
-                title: "Shopping",
-                products: products,
-                path: "/",
+            return products;
+        })
+        .then((products) => {
+            Category.find().then((categories) => {
+                res.render("shop/index", {
+                    title: "Shop",
+                    products: products,
+                    categories: categories,
+                });
             });
         })
         .catch((err) => {
@@ -18,10 +23,15 @@ exports.getIndex = (req, res, next) => {
 exports.getProducts = (req, res, next) => {
     Product.find()
         .then((products) => {
-            res.render("shop/products", {
-                title: "Products",
-                products: products,
-                path: "/",
+            return products;
+        })
+        .then((products) => {
+            Category.find().then((categories) => {
+                res.render("shop/products", {
+                    title: "Products",
+                    products: products,
+                    categories: categories,
+                });
             });
         })
         .catch((err) => {
@@ -33,10 +43,12 @@ exports.getProductsByCategoryId = (req, res, next) => {
     const categoryid = req.params.categoryid;
     const model = [];
 
-    Category.findAll()
+    Category.find()
         .then((categories) => {
             model.categories = categories;
-            return Product.findByCategoryId(categoryid);
+            return Product.find({
+                categories: categoryid,
+            });
         })
         .then((products) => {
             res.render("shop/products", {
