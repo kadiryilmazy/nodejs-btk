@@ -4,8 +4,9 @@ const Category = require("../models/category");
 exports.getProducts = (req, res, next) => {
     Product.find()
         .populate("userId", "name -_id")
-        .select("name price userId imageUrl")
+        .select("name price imageUrl userId")
         .then((products) => {
+            console.log(products);
             res.render("admin/products", {
                 title: "Admin Products",
                 products: products,
@@ -50,13 +51,37 @@ exports.postAddProduct = (req, res, next) => {
 };
 
 exports.getEditProduct = (req, res, next) => {
-    Product.findById(req.params.productid).then((product) => {
-        res.render("admin/edit-product", {
-            title: "Edit Product",
-            path: "/admin/products",
-            product: product,
+    Product.findById(req.params.productid)
+        //.populate('categories', 'name -_id')
+        .then((product) => {
+            console.log(product);
+            return product;
+        })
+        .then((product) => {
+            Category.find().then((categories) => {
+                categories = categories.map((category) => {
+                    if (product.categories) {
+                        product.categories.find((item) => {
+                            if (item.toString() === category._id.toString()) {
+                                category.selected = true;
+                            }
+                        });
+                    }
+
+                    return category;
+                });
+
+                res.render("admin/edit-product", {
+                    title: "Edit Product",
+                    path: "/admin/products",
+                    product: product,
+                    categories: categories,
+                });
+            });
+        })
+        .catch((err) => {
+            console.log(err);
         });
-    });
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -65,8 +90,9 @@ exports.postEditProduct = (req, res, next) => {
     const price = req.body.price;
     const imageUrl = req.body.imageUrl;
     const description = req.body.description;
+    const ids = req.body.categoryids;
 
-    Product.update(
+    Product.updateOne(
         { _id: id },
         {
             $set: {
@@ -74,6 +100,7 @@ exports.postEditProduct = (req, res, next) => {
                 price: price,
                 imageUrl: imageUrl,
                 description: description,
+                categories: ids,
             },
         }
     )
@@ -81,27 +108,14 @@ exports.postEditProduct = (req, res, next) => {
             res.redirect("/admin/products?action=edit");
         })
         .catch((err) => console.log(err));
-
-    /*
-    Product.findById(id)
-        .then(product => {
-            product.name = name;
-            product.price = price;
-            product.imageUrl = imageUrl;
-            product.description = description
-            return product.save()
-        })
-        .then(() => {
-            res.redirect('/admin/products?action=edit');
-        })
-        .catch(err => console.log(err));
-        */
 };
 
 exports.postDeleteProduct = (req, res, next) => {
     const id = req.body.productid;
-    Product.findByIdAndDelete(id)
+
+    Product.findByIdAndRemove(id)
         .then(() => {
+            console.log("product has been deleted.");
             res.redirect("/admin/products?action=delete");
         })
         .catch((err) => {
@@ -115,6 +129,7 @@ exports.getAddCategory = (req, res, next) => {
         path: "/admin/add-category",
     });
 };
+
 exports.postAddCategory = (req, res, next) => {
     const name = req.body.name;
     const description = req.body.description;
@@ -126,12 +141,10 @@ exports.postAddCategory = (req, res, next) => {
 
     category
         .save()
-        .then(() => {
+        .then((result) => {
             res.redirect("/admin/categories?action=create");
         })
-        .catch((err) => {
-            console.log(err);
-        });
+        .catch((err) => console.log(err));
 };
 
 exports.getCategories = (req, res, next) => {
@@ -148,13 +161,15 @@ exports.getCategories = (req, res, next) => {
 };
 
 exports.getEditCategory = (req, res, next) => {
-    Category.findById(req.params.categoryid).then((category) => {
-        res.render("admin/edit-category", {
-            title: "Edit Category",
-            path: "/admin/categories",
-            category: category,
-        });
-    });
+    Category.findById(req.params.categoryid)
+        .then((category) => {
+            res.render("admin/edit-category", {
+                title: "Edit Category",
+                path: "/admin/categories",
+                category: category,
+            });
+        })
+        .catch((err) => console.log(err));
 };
 
 exports.postEditCategory = (req, res, next) => {
@@ -176,7 +191,8 @@ exports.postEditCategory = (req, res, next) => {
 
 exports.postDeleteCategory = (req, res, next) => {
     const id = req.body.categoryid;
-    Category.findByIdAndDelete(id)
+
+    Category.findByIdAndRemove(id)
         .then(() => {
             res.redirect("/admin/categories?action=delete");
         })
