@@ -154,7 +154,9 @@ exports.postOrder = (req, res, next) => {
             });
             return order.save();
         })
-        .then(() => {})
+        .then(() => {
+            return req.user.clearCart();
+        })
         .then(() => {
             res.redirect("/order");
         })
