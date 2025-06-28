@@ -1,35 +1,25 @@
 require("dotenv").config();
-const mongodb = require("mongodb");
-const MongoClient = mongodb.MongoClient;
+const mongoose = require("mongoose");
 
-let _db;
-
-const mongoConnect = (callback) => {
-    const uri = process.env.MONGO_URI;
-
-    MongoClient.connect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-        .then((client) => {
-            _db = client.db("node-app");
-            callback();
-        })
-        .catch((err) => {
-            console.error("MongoDB bağlantı hatası:", err);
-            throw err;
+const mongoConnect = async () => {
+    try {
+        await mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
         });
+        console.log("✅ MongoDB bağlantısı başarılı");
+    } catch (err) {
+        console.error("❌ MongoDB bağlantı hatası:", err);
+        process.exit(1);
+    }
 };
 
 const getdb = () => {
-    if (_db) {
-        return _db;
+    if (mongoose.connection.readyState === 1) {
+        return mongoose.connection;
     }
-    console.error("No database found! Bağlantı kurulmadı.");
-    return null;
+    throw new Error("No Database Connection");
 };
 
-module.exports = {
-    mongoConnect,
-    getdb,
-};
+exports.mongoConnect = mongoConnect;
+exports.getdb = getdb;
